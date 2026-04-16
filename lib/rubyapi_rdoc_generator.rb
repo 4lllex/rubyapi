@@ -147,6 +147,8 @@ class RubyAPIRDocGenerator
   def format_method_source_body(method_doc)
     method_src = CGI.unescapeHTML(ActionView::Base.full_sanitizer.sanitize(method_doc.markup_code))
 
+    method_src.sub!(/\A.*# File .+\n/, "") # remove method location comment
+
     lexer = if method_doc.token_stream&.any? { |t| t.instance_of?(::RDoc::Parser::RipperStateLex::Token) }
       Rouge::Lexers::Ruby.new
     else
