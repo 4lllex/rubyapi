@@ -50,6 +50,26 @@ class ObjectsControllerTest < ActionDispatch::IntegrationTest
     assert_select "#object-type-label", "Module"
   end
 
+  test "show parent without superclass" do
+    get object_url object: @string.path, version: ruby_releases(:latest).version
+
+    assert_select "#mobile-menu-parent span", text: "Object"
+    assert_select "#desktop-menu-parent span", text: "Object"
+  end
+
+  test "link to parent with superclass" do
+    ruby_releases(:latest).ruby_objects.create!(
+      constant: "Object",
+      name: "Object",
+      path: "object",
+      object_type: "class_object"
+    )
+    get object_url object: @string.path, version: ruby_releases(:latest).version
+
+    assert_select '#mobile-menu-parent a[href="/3.4/o/object"]', text: "Object"
+    assert_select '#desktop-menu-parent a[href="/3.4/o/object"]', text: "Object"
+  end
+
   test "constant anchor" do
     get object_url object: ruby_objects(:net_http).path
 

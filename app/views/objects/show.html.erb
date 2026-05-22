@@ -3,13 +3,19 @@
 
 <% content_for :mobile_menu do %>
   <nav class="sticky">
-    <% if @object.superclass %>
-      <div class="mb-3">
+    <% if @object.superclass_constant %>
+      <div class="mb-3" id="mobile-menu-parent">
         <h3 class="font-bold text-gray-700 dark:text-gray-200 p-1 px-2">
           Parent
         </h3>
 
-        <%= link_to @object.superclass.constant, object_path(object: @object.superclass.path), class: "inline-block w-full py-1 px-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 font-mono text-sm" %>
+        <% if @object.superclass %>
+          <%= link_to @object.superclass.constant, object_path(object: @object.superclass.path), class: "inline-block w-full py-1 px-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 font-mono text-sm" %>
+        <% else %>
+          <span class="inline-block w-full py-1 px-2 font-mono text-sm">
+            <%= @object.superclass_constant %>
+          </span>
+        <% end %>
       </div>
     <% end %>
 
@@ -137,13 +143,19 @@
           </form>
         </div>
 
-        <% if @object.superclass %>
-          <div class="mb-3">
+        <% if @object.superclass_constant %>
+          <div class="mb-3" id="desktop-menu-parent">
             <h3 class="font-bold text-gray-700 dark:text-gray-200 p-1 px-2">
               Parent
             </h3>
 
-            <%= link_to @object.superclass.constant, object_path(object: @object.superclass.path), class: "inline-block w-full py-1 px-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 font-mono text-sm" %>
+            <% if @object.superclass %>
+              <%= link_to @object.superclass.constant, object_path(object: @object.superclass.path), class: "inline-block w-full py-1 px-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 font-mono text-sm" %>
+            <% else %>
+              <span class="inline-block w-full py-1 px-2 font-mono text-sm">
+                <%= @object.superclass_constant %>
+              </span>
+            <% end %>
           </div>
         <% end %>
 
