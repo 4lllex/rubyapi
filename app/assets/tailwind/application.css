@@ -1,4 +1,7 @@
-@import "tailwindcss";
+@import "tailwindcss" source(none);
+@source "../../../app";
+@source "../../../lib";
+@source "../../../config";
 
 @theme {
     --color-red-100: #f2d7d8;
