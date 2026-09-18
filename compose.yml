@@ -1,6 +1,7 @@
 services:
   search:
     image: opensearchproject/opensearch:3.5.0
+    init: true
     ports:
       - "127.0.0.1:9600:9600"
       - "127.0.0.1:9200:9200"
@@ -12,12 +13,19 @@ services:
     healthcheck:
       test:
         [
-          "CMD-SHELL",
-          "curl -u admin:RubyApi-Local-OpenSearch-2026! --fail --silent --insecure https://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=50s || exit 1",
+          "CMD",
+          "curl",
+          "--fail",
+          "--silent",
+          "--insecure",
+          "--user",
+          "admin:RubyApi-Local-OpenSearch-2026!",
+          "https://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=50s",
         ]
       retries: 3
       interval: 5s
-      timeout: 3s
+      timeout: 60s
+      start_period: 60s
 
   search-console:
     image: opensearchproject/opensearch-dashboards:3.5.0
@@ -30,8 +38,13 @@ services:
     healthcheck:
       test:
         [
-          "CMD-SHELL",
-          "curl -u admin:RubyApi-Local-OpenSearch-2026! --fail --silent http://localhost:5601/api/status || exit 1",
+          "CMD",
+          "curl",
+          "--fail",
+          "--silent",
+          "--user",
+          "admin:RubyApi-Local-OpenSearch-2026!",
+          "http://localhost:5601/api/status",
         ]
       interval: 5s
       timeout: 3s
