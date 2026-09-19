@@ -65,10 +65,14 @@ class RubyAPIRDocGenerator
           }
         )
 
-        if method_doc.is_alias_for.present?
+        if alias_for = method_doc.is_alias_for
           method.method_alias = {
-            path: clean_path(method_doc.is_alias_for&.path, constant: doc.full_name),
-            name: method_doc.is_alias_for&.name
+            name: alias_for.name,
+            path: Rails.application.routes.url_helpers.object_path(
+              version: @release.version,
+              object: alias_for.parent.path.downcase.chomp(".html"),
+              anchor: alias_for.aref
+            )
           }
         end
 
@@ -127,11 +131,6 @@ class RubyAPIRDocGenerator
 
   def clean_description(method_class, description)
     RubyDescriptionCleaner.clean(@release.version, method_class, description)
-  end
-
-  def clean_path(path, constant:)
-    return nil if path.blank?
-    PathCleaner.clean(URI(path), constant:, version: @release.version)
   end
 
   def call_sequence_for_method_doc(doc)
