@@ -40,7 +40,7 @@ class RubyAPIRDocGenerator
 
     if @release.signatures?
       require_relative "ruby_type_signature_repository"
-      @type_repository = RubyTypeSignatureRepository.new(@options.files.first)
+      @type_repository = RubyTypeSignatureRepository.new(@options.root)
     end
 
     @documentation.each do |doc|
