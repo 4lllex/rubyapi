@@ -11,6 +11,13 @@ class RubyAPIRDocGeneratorTest < ActiveSupport::TestCase
     assert_equal RubyObject.find_by!(constant: "Namespaced::Parent"), object.superclass
   end
 
+  test "method source location" do
+    document "lib/source_location.rb"
+    method = RubyMethod.find_by!(constant: "SourceLocation#example")
+
+    assert_equal "test:lib/source_location.rb:4", method.source_location
+  end
+
   test ":include: and rdoc-ref: directives" do
     document "directives.rb"
     object = RubyObject.find_by!(constant: "Directives")

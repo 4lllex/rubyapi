@@ -57,7 +57,7 @@ class RubyAPIRDocGenerator
           description: clean_description(doc.full_name, method_doc.description),
           constant: (method_doc.type == "instance") ? "#{doc.full_name}##{method_doc.name}" : "#{doc.full_name}.#{method_doc.name}",
           method_type: method_doc.type.to_s,
-          source_location: "#{@release.version}:#{method_path(method_doc)}:#{method_doc.line}",
+          source_location: "#{@release.version}:#{method_doc.file.relative_name}:#{method_doc.line}",
           call_sequences: call_sequence_for_method_doc(method_doc),
           source_body: format_method_source_body(method_doc),
           metadata: {
@@ -109,13 +109,6 @@ class RubyAPIRDocGenerator
   end
 
   private
-
-  def method_path(method_doc)
-    base_ruby_dir = Pathname.new @options.files.first
-    method_file = Pathname.new Rails.root.join(method_doc.file.relative_name)
-
-    method_file.relative_path_from(base_ruby_dir).to_s
-  end
 
   def skip_namespace?(constant)
     SKIP_NAMESPACE_REGEX.match?(constant)
